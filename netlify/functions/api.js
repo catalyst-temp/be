@@ -1,3 +1,7 @@
 // netlify/functions/api.js
-const app = require("../../src/app"); // point to your express app
-module.exports = { handler: app.handler };
+import serverless from "serverless-http";
+import { createApp } from "../../src/app.js";
+
+const app = createApp();
+
+export const handler = serverless(app);

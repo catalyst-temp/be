@@ -1,3 +1,4 @@
+// src/app.js
 import MongoStore from "connect-mongo";
 import cors from "cors";
 import express from "express";
@@ -7,7 +8,6 @@ import { env } from "./config/env.js";
 import { authRouter } from "./routes/auth.js";
 import { checklistRouter } from "./routes/checklist.js";
 import { transactionsRouter } from "./routes/transactions.js";
-const serverless = require("serverless-http");
 
 export function createApp() {
   const app = express();
@@ -65,5 +65,3 @@ export function createApp() {
 
   return app;
 }
-
-module.exports.handler = serverless(app);
