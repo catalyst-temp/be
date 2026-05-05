@@ -7,6 +7,7 @@ import { env } from "./config/env.js";
 import { authRouter } from "./routes/auth.js";
 import { checklistRouter } from "./routes/checklist.js";
 import { transactionsRouter } from "./routes/transactions.js";
+const serverless = require("serverless-http");
 
 export function createApp() {
   const app = express();
@@ -50,7 +51,9 @@ export function createApp() {
   app.use("/api/transactions", transactionsRouter);
 
   app.use((req, res) => {
-    res.status(404).json({ message: `Route not found: ${req.method} ${req.path}` });
+    res
+      .status(404)
+      .json({ message: `Route not found: ${req.method} ${req.path}` });
   });
 
   app.use((error, _req, res, _next) => {
@@ -62,3 +65,5 @@ export function createApp() {
 
   return app;
 }
+
+module.exports.handler = serverless(app);
