@@ -1,4 +1,4 @@
-// netlify/functions/api.js
+// netlify/functions/api.mjs
 import serverless from "serverless-http";
 import { createApp } from "../../src/app.js";
 
