@@ -23,8 +23,11 @@ authRouter.get(
   passport.authenticate("google", {
     failureRedirect: "/api/auth/google/failure",
   }),
-  (_req, res) => {
-    res.redirect(env.clientUrl);
+  (req, res, next) => {
+    req.session.save((error) => {
+      if (error) return next(error);
+      return res.redirect(env.clientUrl);
+    });
   },
 );
 
@@ -38,7 +41,11 @@ authRouter.post("/logout", (req, res, next) => {
 
     req.session.destroy((destroyError) => {
       if (destroyError) return next(destroyError);
-      res.clearCookie("catalyst.sid");
+      res.clearCookie("catalyst.sid", {
+        httpOnly: true,
+        sameSite: "lax",
+        secure: true,
+      });
       return res.json({ ok: true });
     });
   });

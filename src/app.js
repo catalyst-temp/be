@@ -38,11 +38,11 @@ export function createApp() {
       //   secure: false,
       //   maxAge: 1000 * 60 * 60 * 24 * 14,
       // },
-      //production
       cookie: {
         httpOnly: true,
-        sameSite: "none",
+        sameSite: "lax",
         secure: true,
+        maxAge: 1000 * 60 * 60 * 24 * 14,
       },
     }),
   );
