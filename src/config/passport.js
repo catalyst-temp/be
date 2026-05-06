@@ -1,3 +1,4 @@
+// src/config/passport.js
 import passport from "passport";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import { env } from "./env.js";
@@ -36,7 +37,9 @@ export function configurePassport() {
           const name = profile.displayName || email || "Catalyst User";
 
           if (!email) {
-            return done(new Error("Google account does not expose an email address"));
+            return done(
+              new Error("Google account does not expose an email address"),
+            );
           }
 
           const user = await User.findOneAndUpdate(

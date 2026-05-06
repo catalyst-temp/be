@@ -31,14 +31,22 @@ export function createApp() {
         mongoUrl: env.mongoUri,
         collectionName: "sessions",
       }),
+      // development
+      // cookie: {
+      //   httpOnly: true,
+      //   sameSite: "lax",
+      //   secure: false,
+      //   maxAge: 1000 * 60 * 60 * 24 * 14,
+      // },
+      //production
       cookie: {
         httpOnly: true,
-        sameSite: "lax",
-        secure: false,
-        maxAge: 1000 * 60 * 60 * 24 * 14,
+        sameSite: "none",
+        secure: true,
       },
     }),
   );
+  app.set("trust proxy", 1);
   app.use(passport.initialize());
   app.use(passport.session());
 
