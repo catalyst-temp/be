@@ -3,6 +3,10 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
+function normalizeUrl(value) {
+  return value?.replace(/\/+$/, "");
+}
+
 export const env = {
   appName: process.env.APP_NAME || "Catalyst",
   port: Number(process.env.PORT) || 4000,
@@ -11,7 +15,7 @@ export const env = {
   googleClientId: process.env.GOOGLE_CLIENT_ID,
   googleClientSecret: process.env.GOOGLE_CLIENT_SECRET,
   googleCallbackUrl: process.env.GOOGLE_CALLBACK_URL,
-  clientUrl: process.env.CLIENT_URL,
+  clientUrl: normalizeUrl(process.env.CLIENT_URL),
 };
 
 export function validateEnv() {
