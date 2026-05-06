@@ -10,10 +10,15 @@ export const env = {
   sessionSecret: process.env.SESSION_SECRET,
   googleClientId: process.env.GOOGLE_CLIENT_ID,
   googleClientSecret: process.env.GOOGLE_CLIENT_SECRET,
-  googleCallbackUrl:
-    process.env.GOOGLE_CALLBACK_URL ||
-    "http://localhost:4000/api/auth/google/callback",
-  clientUrl: process.env.CLIENT_URL || "http://localhost:5173",
+  // development
+  // googleCallbackUrl:
+  //   process.env.GOOGLE_CALLBACK_URL ||
+  //   "http://localhost:4000/api/auth/google/callback",
+  // clientUrl: process.env.CLIENT_URL || "http://localhost:5173",
+
+  // production
+  googleCallbackUrl: process.env.GOOGLE_CALLBACK_URL,
+  clientUrl: process.env.CLIENT_URL,
 };
 
 export function validateEnv() {
@@ -22,6 +27,24 @@ export function validateEnv() {
     ["SESSION_SECRET", env.sessionSecret],
     ["GOOGLE_CLIENT_ID", env.googleClientId],
     ["GOOGLE_CLIENT_SECRET", env.googleClientSecret],
+  ];
+
+  const missing = required.filter(([, value]) => !value).map(([key]) => key);
+  if (missing.length) {
+    throw new Error(
+      `Missing required environment variables: ${missing.join(", ")}`,
+    );
+  }
+}
+
+export function validateEnv() {
+  const required = [
+    ["MONGODB_URI", env.mongoUri],
+    ["SESSION_SECRET", env.sessionSecret],
+    ["GOOGLE_CLIENT_ID", env.googleClientId],
+    ["GOOGLE_CLIENT_SECRET", env.googleClientSecret],
+    ["GOOGLE_CALLBACK_URL", env.googleCallbackUrl], // ← add this
+    ["CLIENT_URL", env.clientUrl], // ← and this
   ];
 
   const missing = required.filter(([, value]) => !value).map(([key]) => key);

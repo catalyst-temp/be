@@ -1,3 +1,4 @@
+// src/routes/auth.js
 import express from "express";
 import { passport } from "../config/passport.js";
 import { env } from "../config/env.js";
