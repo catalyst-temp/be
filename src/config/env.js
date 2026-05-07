@@ -1,13 +1,25 @@
-// src/config/env.js
 import dotenv from "dotenv";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 
-dotenv.config();
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const rootDir = path.resolve(__dirname, "../..");
+
+dotenv.config({ path: path.join(rootDir, ".env") });
+
+const appEnv = process.env.APP_ENV || "local";
+if (!/^[a-zA-Z0-9_-]+$/.test(appEnv)) {
+  throw new Error("APP_ENV may only contain letters, numbers, hyphens, and underscores");
+}
+
+dotenv.config({ path: path.join(rootDir, `.env.${appEnv}`) });
 
 function normalizeUrl(value) {
   return value?.replace(/\/+$/, "");
 }
 
 export const env = {
+  appEnv,
   appName: process.env.APP_NAME || "Catalyst",
   port: Number(process.env.PORT) || 4000,
   mongoUri: process.env.MONGODB_URI,

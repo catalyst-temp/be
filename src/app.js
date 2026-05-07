@@ -31,18 +31,13 @@ export function createApp() {
         mongoUrl: env.mongoUri,
         collectionName: "sessions",
       }),
-      // development
-      // cookie: {
-      //   httpOnly: true,
-      //   sameSite: "lax",
-      //   secure: false,
-      //   maxAge: 1000 * 60 * 60 * 24 * 14,
-      // },
       cookie: {
         httpOnly: true,
-        sameSite: "lax",
-        secure: true,
-        maxAge: 1000 * 60 * 60 * 24 * 14,
+        // In development (local): lax + no secure (HTTP on localhost)
+        // In production: none + secure (cross-origin FE/BE on Netlify)
+        sameSite: env.appEnv === "local" ? "lax" : "none",
+        secure: env.appEnv !== "local",
+        maxAge: 1000 * 60 * 60 * 24 * 14, // 14 days
       },
     }),
   );

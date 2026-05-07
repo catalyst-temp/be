@@ -4,6 +4,15 @@ import { passport } from "../config/passport.js";
 import { env } from "../config/env.js";
 import { serializeUser } from "../utils/serializers.js";
 
+function getCookieConfig() {
+  const isLocal = env.appEnv === "local";
+  return {
+    httpOnly: true,
+    sameSite: isLocal ? "lax" : "none",
+    secure: !isLocal,
+  };
+}
+
 export const authRouter = express.Router();
 
 authRouter.get("/me", (req, res) => {
@@ -41,12 +50,7 @@ authRouter.post("/logout", (req, res, next) => {
 
     req.session.destroy((destroyError) => {
       if (destroyError) return next(destroyError);
-      res.clearCookie("catalyst.sid", {
-        httpOnly: true,
-        sameSite: "lax",
-        secure: true,
-      });
-      return res.json({ ok: true });
+      res.clearCookie("catalyst.sid", getCookieConfig());
     });
   });
 });
