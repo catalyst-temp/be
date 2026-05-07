@@ -2,7 +2,8 @@ import dotenv from "dotenv";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-dotenv.config();
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const appEnv = process.env.APP_ENV || "local";
 if (!/^[a-zA-Z0-9_-]+$/.test(appEnv)) {
@@ -10,6 +11,22 @@ if (!/^[a-zA-Z0-9_-]+$/.test(appEnv)) {
     "APP_ENV may only contain letters, numbers, hyphens, and underscores",
   );
 }
+
+function loadEnvFiles(env) {
+  const files = [
+    `.env`, // Base defaults (always loaded)
+    `.env.${env}`, // Environment-specific: .env.local, .env.production, etc.
+  ];
+
+  for (const file of files) {
+    dotenv.config({
+      path: path.resolve(__dirname, `../../${file}`),
+      override: true, // Later files override earlier ones
+    });
+  }
+}
+
+loadEnvFiles(appEnv);
 
 function normalizeUrl(value) {
   return value?.replace(/\/+$/, "");
