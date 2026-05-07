@@ -2,17 +2,14 @@ import dotenv from "dotenv";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const rootDir = path.resolve(__dirname, "../..");
-
-dotenv.config({ path: path.join(rootDir, ".env") });
+dotenv.config();
 
 const appEnv = process.env.APP_ENV || "local";
 if (!/^[a-zA-Z0-9_-]+$/.test(appEnv)) {
-  throw new Error("APP_ENV may only contain letters, numbers, hyphens, and underscores");
+  throw new Error(
+    "APP_ENV may only contain letters, numbers, hyphens, and underscores",
+  );
 }
-
-dotenv.config({ path: path.join(rootDir, `.env.${appEnv}`) });
 
 function normalizeUrl(value) {
   return value?.replace(/\/+$/, "");
@@ -32,18 +29,13 @@ export const env = {
 
 export function validateEnv() {
   const required = [
-    ["MONGODB_URI", env.mongoUri],
-    ["SESSION_SECRET", env.sessionSecret],
-    ["GOOGLE_CLIENT_ID", env.googleClientId],
-    ["GOOGLE_CLIENT_SECRET", env.googleClientSecret],
-    ["GOOGLE_CALLBACK_URL", env.googleCallbackUrl],
-    ["CLIENT_URL", env.clientUrl],
+    "MONGODB_URI",
+    "GOOGLE_CLIENT_ID",
+    "GOOGLE_CLIENT_SECRET",
+    "SESSION_SECRET",
   ];
-
-  const missing = required.filter(([, value]) => !value).map(([key]) => key);
+  const missing = required.filter((key) => !process.env[key]);
   if (missing.length) {
-    throw new Error(
-      `Missing required environment variables: ${missing.join(", ")}`,
-    );
+    throw new Error(`Missing env variables: ${missing.join(", ")}`);
   }
 }

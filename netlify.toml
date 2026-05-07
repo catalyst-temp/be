@@ -7,6 +7,12 @@
 [functions.esbuild]
   format = "esm"
 
+[functions.api]
+  external_node_modules = ["the-problematic-package"]
+
+[functions.esbuild_options]
+  format = "esm"
+
 [[redirects]] 
   from = "/api/*"
   to = "/.netlify/functions/api/:splat"
