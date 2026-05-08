@@ -13,6 +13,8 @@ if (!/^[a-zA-Z0-9_-]+$/.test(appEnv)) {
 }
 
 function loadEnvFiles(env) {
+  const root = process.cwd();
+
   const files = [
     `.env`, // Base defaults (always loaded)
     `.env.${env}`, // Environment-specific: .env.local, .env.production, etc.
@@ -20,7 +22,7 @@ function loadEnvFiles(env) {
 
   for (const file of files) {
     dotenv.config({
-      path: path.resolve(__dirname, `../../${file}`),
+      path: path.resolve(root, file),
       override: true, // Later files override earlier ones
     });
   }
