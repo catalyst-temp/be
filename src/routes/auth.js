@@ -31,6 +31,7 @@ authRouter.get(
   "/google/callback",
   passport.authenticate("google", {
     failureRedirect: "/api/auth/google/failure",
+    successRedirect: `${env.clientUrl}/`,
   }),
   (req, res, next) => {
     req.session.save((error) => {
