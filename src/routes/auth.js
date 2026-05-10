@@ -31,7 +31,6 @@ authRouter.get(
   "/google/callback",
   passport.authenticate("google", {
     failureRedirect: "/api/auth/google/failure",
-    successRedirect: `${env.clientUrl}/`,
   }),
   (req, res, next) => {
     req.session.save((error) => {
@@ -52,6 +51,7 @@ authRouter.post("/logout", (req, res, next) => {
     req.session.destroy((destroyError) => {
       if (destroyError) return next(destroyError);
       res.clearCookie("catalyst.sid", getCookieConfig());
+      return res.json({ ok: true });
     });
   });
 });
