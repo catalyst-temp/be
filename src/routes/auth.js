@@ -5,11 +5,10 @@ import { env } from "../config/env.js";
 import { serializeUser } from "../utils/serializers.js";
 
 function getCookieConfig() {
-  const isLocal = env.appEnv === "local";
   return {
     httpOnly: true,
-    sameSite: isLocal ? "lax" : "none",
-    secure: !isLocal,
+    sameSite: "lax",
+    secure: env.appEnv !== "local",
   };
 }
 

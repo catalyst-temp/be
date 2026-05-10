@@ -33,9 +33,9 @@ export function createApp() {
       }),
       cookie: {
         httpOnly: true,
-        // In development (local): lax + no secure (HTTP on localhost)
-        // In production: none + secure (cross-origin FE/BE on Netlify)
-        sameSite: env.appEnv === "local" ? "lax" : "none",
+        // SameSite=Lax everywhere: in production all traffic goes through
+        // the FE Netlify proxy (same-origin), no cross-origin cookies needed.
+        sameSite: "lax",
         secure: env.appEnv !== "local",
         maxAge: 1000 * 60 * 60 * 24 * 14, // 14 days
       },
